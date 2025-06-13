@@ -1,0 +1,47 @@
+.modal {
+  max-width: 750px;
+  padding: 2rem;
+  border-radius: 8px;
+  background: var(--white);
+}
+
+.auth {
+  width: 475px;
+  padding: 1rem;
+  border-radius: 20px;
+  border: 2px solid var(--turquoise);
+  background: rgba(24, 24, 27, 0.89);
+  color: var(--white);
+  box-shadow: 2px 5px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.cardDescription {
+  color: var(--lightgray);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}

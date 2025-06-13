@@ -1,0 +1,31 @@
+.select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--graydialogbox);
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: var(--white);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22' fill='none'%3E%3Cpath d='M4.8125 7.90625L11 14.0938L17.1875 7.90625' stroke='%23898989' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+
+  cursor: pointer;
+}
+
+.default {
+  border: 1px solid var(--graydialogbox);
+}
+
+.modal {
+  border: 1px solid var(--grayform);
+}
+
+.disable {
+  background-color: var(--graybgform);
+  border: 1px solid var(--grayform);
+  color: var(--grayform);
+}

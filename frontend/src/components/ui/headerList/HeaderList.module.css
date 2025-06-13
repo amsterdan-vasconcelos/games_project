@@ -1,0 +1,35 @@
+.headerRow {
+  display: grid;
+  grid-template-columns: 110px 150px 200px 120px 140px 100px 140px;
+  background-color: #0c0a09;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px 14px;
+  max-width: 1110px;
+  margin: auto;
+  justify-content: space-around;
+}
+
+.headerItem {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  cursor: pointer;
+  gap: 4px;
+  color: #acacac;
+  font-weight: 600;
+}
+
+.sortIcon {
+  font-size: 10px;
+  color: #2de4c2;
+}
+
+.imageSpace {
+  width: 90px;
+}
+
+.iconsSpace {
+  width: 120px;
+}

@@ -1,0 +1,62 @@
+.register {
+  margin: 0;
+  height: 100vh;
+  background-color: var(--grayform);
+  background-image: url('../../../assets/wallpaper.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  width: 149px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 0;
+}
+
+.cardheader {
+  display: flex;
+  flex-direction: column;
+  margin: 12px auto 54px;
+  gap: 16px;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.form {
+  margin: 0 auto;
+  width: 95%;
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btnsign {
+  border-style: none;
+  padding: 8px 0;
+  border: 2px solid var(--turquoise);
+}
+
+.btnsign:hover {
+  background-color: #42d9c725;
+}
+
+.footer {
+  margin: 28px 0 40px;
+  text-align: center;
+}
+
+.footer a {
+  color: var(--turquoise);
+}

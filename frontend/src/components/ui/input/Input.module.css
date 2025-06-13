@@ -1,0 +1,17 @@
+.input {
+  width: 100%;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  border: 1px solid var(--graydialogbox);
+  border-radius: 4px;
+  background: var(--white);
+}
+
+.squared {
+  border-radius: 4px;
+}
+
+.rounded {
+  border-radius: 8px;
+  border: 1px solid var(--grayform);
+}

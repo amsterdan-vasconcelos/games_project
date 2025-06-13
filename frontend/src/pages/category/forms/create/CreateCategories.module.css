@@ -1,0 +1,56 @@
+.dialogContent {
+  width: 750px;
+  height: auto;
+  padding: 40px;
+  background-color: var(--white);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+.dialogTitle {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--black);
+  margin-bottom: 30px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  margin-top: 16px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.formGroup{
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+}
+
+.textarea {
+  margin-top: 7px;
+  border: 1px solid var(--grayform);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000000;
+  background-color: var(--white);
+  resize: vertical;
+  min-height: 120px;
+  padding: 8px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--black);
+}

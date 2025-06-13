@@ -1,0 +1,28 @@
+.button {
+  width: auto;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  border-radius: 4px;
+  color: var(--white);
+  background: var(--turquoise);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.white {
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--gray);
+}
+
+.turquoise {
+  background: var(--turquoise);
+}
+
+.gray {
+  background: var(--graybutton);
+}
