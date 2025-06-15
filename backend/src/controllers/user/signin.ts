@@ -1,59 +1,63 @@
 import { RequestHandler } from 'express';
-
 import { userServices } from '@/services';
 import { passwordCrypto } from '@/utils/crypto';
-import { jwt } from '@/utils/jwt';
+import {
+  ERROR_MESSAGES,
+  COOKIE_CONFIG,
+  generateFingerprint,
+  hashFingerprint,
+  createTokens,
+  sendAuthError,
+} from '@/utils/auth';
 
 export const signIn: RequestHandler = async (req, res) => {
   const { authorization } = req.headers;
 
-  if (!authorization || !authorization.startsWith('Basic ')) {
-    res.status(401).json({ message: 'Token not provided.' });
-    return;
+  if (!authorization?.startsWith('Basic ')) {
+    return sendAuthError(res, ERROR_MESSAGES.TOKEN_NOT_PROVIDED, 401);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_type, base64Credentials] = authorization.split(' ');
+  const [email, password] = Buffer.from(authorization.split(' ')[1], 'base64')
+    .toString('utf-8')
+    .split(':');
 
-  const credentials = Buffer.from(base64Credentials, 'base64').toString(
-    'utf-8',
-  );
-
-  const [email, password] = credentials.split(':');
-
-  if (!email) {
-    res.status(400).json({ error: 'Email is required.' });
-    return;
-  }
-
-  if (!password) {
-    res.status(400).json({ error: 'Password is required.' });
-    return;
+  if (!email || !password) {
+    return sendAuthError(res, ERROR_MESSAGES.INVALID_CREDENTIALS, 401);
   }
 
   const user = await userServices.signIn(email);
 
-  if (user instanceof Error) {
-    res.status(500).json({ Error: user.message });
-    return;
+  if (user instanceof Error || !user?._id) {
+    return sendAuthError(res, ERROR_MESSAGES.INVALID_CREDENTIALS, 401);
   }
 
-  if (!user || !user.full_name || !user.password) {
-    res.status(400).json({ error: 'Invalid email' });
-    return;
-  }
-
-  const passwordMatched = await passwordCrypto.verifyPassword({
+  const passwordValid = await passwordCrypto.verifyPassword({
     password,
-    hashedPassword: user.password,
+    hashedPassword: user.password!,
   });
 
-  if (!passwordMatched) {
-    res.status(400).json({ error: 'Invalid password' });
-    return;
+  if (!passwordValid) {
+    return sendAuthError(res, ERROR_MESSAGES.INVALID_CREDENTIALS, 401);
   }
 
-  const accessToken = jwt.sign({ id: user.id, full_name: user.full_name });
+  const fingerprint = generateFingerprint();
+  const ctx = hashFingerprint(fingerprint);
+  const { accessToken, refreshToken } = createTokens({
+    user_id: user._id,
+    full_name: user.full_name!,
+    username: user.email!,
+    ctx,
+  });
 
-  res.status(200).json(accessToken);
+  if (typeof accessToken !== 'string') {
+    const { message, status } = accessToken.error;
+    return sendAuthError(res, message, status);
+  }
+  if (typeof refreshToken !== 'string') {
+    const { message, status } = refreshToken.error;
+    return sendAuthError(res, message, status);
+  }
+
+  res.cookie('fingerprint', fingerprint, COOKIE_CONFIG);
+  res.status(200).json({ accessToken, refreshToken });
 };

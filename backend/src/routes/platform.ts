@@ -1,25 +1,35 @@
 import { Router } from 'express';
 
 import { platformControllers } from '@/controllers';
-import { ensureAuthentication } from '@/middlewares/ensureAuthentication';
-
-const {
-  create,
-  createValidator,
-  deleteById,
-  getAll,
-  getAllValidator,
-  updateById,
-  updateByIdValidator,
-} = platformControllers;
+import { ensureAuthenticated } from '@/middlewares/ensureAuthenticated';
 
 const routes = Router();
 
-routes.use(ensureAuthentication);
+routes.get(
+  '/platforms',
+  ensureAuthenticated,
+  platformControllers.getAllValidator,
+  platformControllers.getAll,
+);
 
-routes.get('/platforms', getAllValidator, getAll);
-routes.post('/platforms', createValidator, create);
-routes.put('/platforms/:id', updateByIdValidator, updateById);
-routes.delete('/platforms/:id', deleteById);
+routes.post(
+  '/platforms',
+  ensureAuthenticated,
+  platformControllers.createValidator,
+  platformControllers.create,
+);
+
+routes.put(
+  '/platforms/:id',
+  ensureAuthenticated,
+  platformControllers.updateByIdValidator,
+  platformControllers.updateById,
+);
+
+routes.delete(
+  '/platforms/:id',
+  ensureAuthenticated,
+  platformControllers.deleteById,
+);
 
 export { routes };

@@ -1,29 +1,39 @@
 import { gamesControllers } from '@/controllers';
-import { ensureAuthentication } from '@/middlewares/ensureAuthentication';
+import { ensureAuthenticated } from '@/middlewares/ensureAuthenticated';
 import { Router } from 'express';
-
-const {
-  create,
-  createValidator,
-  deleteById,
-  favoriteById,
-  favoriteByIdValidator,
-  getAll,
-  getAllValidator,
-  getById,
-  updateById,
-  updateByIdValidator,
-} = gamesControllers;
 
 const routes = Router();
 
-routes.use(ensureAuthentication);
+routes.get(
+  '/games',
+  ensureAuthenticated,
+  gamesControllers.getAllValidator,
+  gamesControllers.getAll,
+);
 
-routes.get('/games', getAllValidator, getAll);
-routes.post('/games', createValidator, create);
-routes.get('/games/:id', getById);
-routes.put('/games/:id', updateByIdValidator, updateById);
-routes.delete('/games/:id', ensureAuthentication, deleteById);
-routes.patch('/games/:id', favoriteByIdValidator, favoriteById);
+routes.post(
+  '/games',
+  ensureAuthenticated,
+  gamesControllers.createValidator,
+  gamesControllers.create,
+);
+
+routes.get('/games/:id', ensureAuthenticated, gamesControllers.getById);
+
+routes.put(
+  '/games/:id',
+  ensureAuthenticated,
+  gamesControllers.updateByIdValidator,
+  gamesControllers.updateById,
+);
+
+routes.delete('/games/:id', ensureAuthenticated, gamesControllers.deleteById);
+
+routes.patch(
+  '/games/:id',
+  ensureAuthenticated,
+  gamesControllers.favoriteByIdValidator,
+  gamesControllers.favoriteById,
+);
 
 export { routes };

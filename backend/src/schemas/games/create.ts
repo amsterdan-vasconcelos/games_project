@@ -6,7 +6,7 @@ export const bodySchema = z.object({
   description: z.string().optional(),
   category: z.string().min(1, 'Category is required'),
   platform: z.string().min(1, 'Platform is required'),
-  status: z.string().min(1, 'Status is required'),
+  status: z.enum(['playing', 'done', 'abandoned']),
   favorite: z.boolean().optional(),
   acquisition_date: z.coerce.date().optional(),
   finish_date: z.coerce.date().optional(),

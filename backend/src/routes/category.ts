@@ -1,24 +1,35 @@
-import { categoryController } from '@/controllers';
-import { ensureAuthentication } from '@/middlewares/ensureAuthentication';
 import { Router } from 'express';
 
-const {
-  create,
-  createValidator,
-  deleteById,
-  getAll,
-  getAllValidator,
-  updateById,
-  updateByIdValidator,
-} = categoryController;
+import { categoryController } from '@/controllers';
+import { ensureAuthenticated } from '@/middlewares/ensureAuthenticated';
 
 const routes = Router();
 
-routes.use(ensureAuthentication);
+routes.get(
+  '/categories',
+  ensureAuthenticated,
+  categoryController.getAllValidator,
+  categoryController.getAll,
+);
 
-routes.get('/categories', getAllValidator, getAll);
-routes.post('/categories', createValidator, create);
-routes.put('/categories/:id', updateByIdValidator, updateById);
-routes.delete('/categories/:id', deleteById);
+routes.post(
+  '/categories',
+  ensureAuthenticated,
+  categoryController.createValidator,
+  categoryController.create,
+);
+
+routes.put(
+  '/categories/:id',
+  ensureAuthenticated,
+  categoryController.updateByIdValidator,
+  categoryController.updateById,
+);
+
+routes.delete(
+  '/categories/:id',
+  ensureAuthenticated,
+  categoryController.deleteById,
+);
 
 export { routes };

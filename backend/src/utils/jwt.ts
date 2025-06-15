@@ -1,30 +1,69 @@
+import { UserId } from '@/types/mongoose';
 import * as jwtRoot from 'jsonwebtoken';
+import { createObjectError } from './objectError';
 
-type JwtData = { id: string; full_name: string };
+type AccessTokenPayload = {
+  user_id: UserId;
+  full_name: string;
+  ctx: string;
+  type: 'access';
+};
 
-const sign = (data: JwtData) => {
-  if (!process.env.JWT_SECRET) return 'JWT_SECRET_NOT_FOUND';
+type RefreshTokenPayload = {
+  username: string;
+  ctx: string;
+  type: 'refresh';
+};
 
-  return jwtRoot.sign(data, process.env.JWT_SECRET, { expiresIn: '24h' });
+type ExpiresIn = jwtRoot.SignOptions['expiresIn'];
+
+const signAccessToken = (data: Omit<AccessTokenPayload, 'type'>) => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) return createObjectError('Internal server error', 500);
+
+  const payload = { ...data, type: 'access' };
+  const expiresIn = (process.env.ACCESS_TOKEN_EXPIRES || '15m') as ExpiresIn;
+
+  return jwtRoot.sign(payload, secret, { expiresIn });
+};
+
+const signRefreshToken = (data: Omit<RefreshTokenPayload, 'type'>) => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) return createObjectError('Internal server error', 500);
+
+  const payload = { ...data, type: 'refresh' };
+  const expiresIn = (process.env.REFRESH_TOKEN_EXPIRES || '1h') as ExpiresIn;
+
+  return jwtRoot.sign(payload, secret, { expiresIn });
 };
 
 const verify = (token: string) => {
-  if (!process.env.JWT_SECRET) return 'JWT_SECRET_NOT_FOUND';
+  const secret = process.env.JWT_SECRET;
+  if (!process.env.JWT_SECRET) {
+    return createObjectError('Internal server error', 500);
+  }
 
   try {
-    const decoded = jwtRoot.verify(token, process.env.JWT_SECRET);
+    const decoded = jwtRoot.verify(token, secret);
 
-    if (typeof decoded === 'string') return 'INVALID_TOKEN';
+    if (typeof decoded === 'string') {
+      return createObjectError('Invalid token', 401);
+    }
 
-    return decoded as JwtData;
+    return decoded as AccessTokenPayload | RefreshTokenPayload;
   } catch (error) {
+    if (error instanceof jwtRoot.TokenExpiredError) {
+      console.error('Token expired:', error);
+      return createObjectError('Token expired', 401);
+    }
+
     console.error('JWT verification error:', error);
-    return 'INVALID_TOKEN';
+    return createObjectError('Invalid token', 401);
   }
 };
 
 const jwt = {
-  sign,
+  sign: { signAccessToken, signRefreshToken },
   verify,
 };
 

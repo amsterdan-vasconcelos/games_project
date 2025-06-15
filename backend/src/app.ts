@@ -1,13 +1,15 @@
 import './config/connectiondb';
 
-import cors from 'cors';
 import express from 'express';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import { category, game, home, platform, user } from './routes';
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
